@@ -55,7 +55,7 @@ export function User(props: { user: User }) {
 
 ### When to use `useMount$()`
 
-You wanna run some code ONLY when the component mounts, once.
+You want to run some code ONLY when the component mounts, once.
 
 ## `useServerMount$()`
 
@@ -160,15 +160,15 @@ export const Cmp = component$(() => {
 
 The example above uses the `track` function to watch changes in `() => store.count`. The callback will run once in the SSR when the component is mounted and every time `store.count` changes.
 
-> Notice that `useWatch$()` runs BEFORE the actual rendering and in the server, so manual DOM manipulation need to be done with carefulness.
+> Notice that `useWatch$()` runs BEFORE the actual rendering and in the server, so manual DOM manipulation needs to be done carefully.
 
 > See also the `useClientEffect$()` hook that shares similar semantics but only runs on the client after rendering.
 
 ### When to use `useWatch$()`
 
-You wanna mutate some state, or perform some action when some state changes. Ie, you need to have some side effects.
+You want to mutate some state, or perform some action when some state changes. In other words, you need side effects.
 
-> Note, if you wanna load some data (for example a fetch()), to later use that in your component, look at [`useResource$()`](/docs/components/resource/index.mdx). This API will be even more efficiently leveraging SSR streaming and parallelisim.
+> Note, if you want to load some data (for example a fetch()), to later use that in your component, look at [`useResource$()`](/docs/components/resource/index.mdx). This API can more efficiently leverage SSR streaming and parallelism.
 
 ## `useClientEffect$()`
 
@@ -179,7 +179,7 @@ You wanna mutate some state, or perform some action when some state changes. Ie,
 
 Similarly to `useWatch$()` or `useMount$()` this hook will also run at least once, but it will never RUN in the server, that is, it will run only in the browser.
 
-For all components that got mounted during SSR (in the server), the `useClientEffect$()` will run eagarly, that means, without user interaction, but the eagerness can be configured!
+For all components that got mounted during SSR (in the server), the `useClientEffect$()` will run eagerly - without user interaction, but the eagerness can be configured!
 
 ```tsx
 useClientEffect$(() => console.log('runs in the browser'), {
@@ -215,7 +215,7 @@ export const Timer = component$(() => {
 });
 ```
 
-> **NOTE:** Don't abuse `useClientEffect$()` when the same logic can be achieved using `useWatch$()` or other means. Ask to yourself: Does this code really need to run at the beginning in the browser? If the answer is no, `useClientEffect$()` is probably not the right answer.
+> **NOTE:** Don't abuse `useClientEffect$()` when the same logic can be achieved using `useWatch$()` or other means. Ask yourself: Does this code really need to run in the browser, right at the beginning? If the answer is no, `useClientEffect$()` is probably not the right answer.
 
 > How does it compare with React's `useEffect()`? Both APIs share a lot of semantics, but while both run AFTER rendering,`useClientEffect$()` can run also independently from rendering.
 
