@@ -213,10 +213,30 @@ test.describe('slot', () => {
       await toggleBtn.click();
       await expect(modalContent).not.toBeHidden();
     });
+
+    test('should be able to toggle between named slots using a prop', async ({ page }) => {
+      const container = page.locator('#issue-2688-container');
+      const toggleBtn = page.locator('#issue-2688-toggle');
+
+      await expect(container).toHaveText('Alpha');
+      await expect(container).not.toHaveText('Bravo');
+
+      await toggleBtn.click();
+      await page.waitForTimeout(100);
+
+      await expect(container).toHaveText('Bravo');
+      await expect(container).not.toHaveText('Alpha');
+
+      await toggleBtn.click();
+      await page.waitForTimeout(100);
+
+      await expect(container).toHaveText('Alpha');
+      await expect(container).not.toHaveText('Bravo');
+    });
   }
 
   test.beforeEach(async ({ page }) => {
-    await page.goto('/e2e/slot');
+    await page.goto('/e2e/slot/');
     page.on('pageerror', (err) => expect(err).toEqual(undefined));
   });
 

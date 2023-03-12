@@ -24,6 +24,7 @@ export const SlotParent = component$(() => {
           <Issue1410>
             <span id="modal-content">Model content</span>
           </Issue1410>
+          <Issue2688 />
           <Projector state={state} id="btn1">
             {!state.removeContent && <>DEFAULT {state.count}</>}
             <span q:slot="ignore">IGNORE</span>
@@ -161,5 +162,30 @@ export const Thing = component$((props: { state: any; id: string }) => {
     <article class="todoapp" id={props.id}>
       {!props.state.disableNested && <Slot />}
     </article>
+  );
+});
+
+export const Issue2688Switch = component$((props: { name: string }) => {
+  return <Slot name={props.name} />;
+});
+
+export const Issue2688 = component$(() => {
+  const store = useStore({ flip: false });
+
+  return (
+    <div id="issue-2688-container">
+      <button
+        id="issue-2688-toggle"
+        onClick$={() => {
+          store.flip = !store.flip;
+        }}
+      >
+        Toggle
+      </button>
+      <Issue2688Switch name={store.flip ? 'b' : 'a'}>
+        <div q:slot="a">Alpha</div>
+        <div q:slot="b">Bravo</div>
+      </Issue2688Switch>
+    </div>
   );
 });

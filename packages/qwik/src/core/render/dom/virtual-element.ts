@@ -140,14 +140,24 @@ export class VirtualElementImpl implements VirtualElement {
   }
 
   insertBefore<T extends Node>(node: T, ref: Node | null): T {
-    const parent = this.parentElement;
-    if (parent) {
-      const ref2 = ref ? ref : this.close;
-      parent.insertBefore(node, ref2);
-    } else {
-      this.template.insertBefore(node, ref);
+    try {
+      const parent = this.parentElement;
+      if (parent) {
+        const ref2 = ref ? ref : this.close;
+        parent.insertBefore(node, ref2);
+      } else {
+        this.template.insertBefore(node, ref);
+      }
+      return node;
+    } catch (err) {
+      console.error('caught insertBefore error', {
+        self: this,
+        parent: this.parentElement,
+        node,
+        ref,
+      });
+      throw err;
     }
-    return node;
   }
 
   remove() {
