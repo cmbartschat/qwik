@@ -305,9 +305,23 @@ test.describe('render', () => {
 
     test('issue3622', async ({ page }) => {
       const checkbox = page.locator('#issue-3622-checkbox');
-      await checkbox.click();
       const select = page.locator('#issue-3622-select');
-      await expect(select).toHaveAttribute('value', 'option2');
+      const input = page.locator('#issue-3622-input');
+      await expect(select).toHaveJSProperty('value', 'option1');
+      await expect(input).toHaveJSProperty('value', 'value1');
+      await checkbox.click();
+      expect((await select.all()).length).toBe(0);
+      await checkbox.click();
+      await expect(select).toHaveJSProperty('value', 'option1');
+      await expect(input).toHaveJSProperty('value', 'value1');
+    });
+    test('issue3622input', async ({ page }) => {
+      const checkbox = page.locator('#issue-3622-checkbox');
+      const input = page.locator('#issue-3622-input');
+      await expect(input).toHaveJSProperty('value', 'value1');
+      await checkbox.click();
+      await checkbox.click();
+      await expect(input).toHaveJSProperty('value', 'value1');
     });
   }
 
