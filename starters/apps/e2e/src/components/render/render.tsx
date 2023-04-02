@@ -78,6 +78,7 @@ export const RenderChildren = component$(() => {
       <Pr3475 />
       <Issue3561 />
       <Issue3542 atom={{ code: 1 }} />
+      <Issue3622 />
     </>
   );
 });
@@ -601,4 +602,22 @@ export const Issue3542 = component$(({ atom }: any) => {
     status = 'CODE IS 1';
   }
   return <span id="issue-3542-result">{status}</span>;
+});
+
+
+export const Issue3622 = component$(() => {
+  const showingSelect = useSignal(true)
+  return <div>
+    <label>
+      <input id='issue-3622-checkbox' type='checkbox' checked={showingSelect.value} onClick$={() => showingSelect.value = !showingSelect.value}/>
+      Show select field
+    </label>
+
+    {showingSelect.value && <div> 
+      <select id='issue-3622-select' value='option1'>
+        <option value='option1'>Option 1</option>
+        <option value='option2'>Option 2</option>
+      </select>
+    </div>}
+  </div>;
 });

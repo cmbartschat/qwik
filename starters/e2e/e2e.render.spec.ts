@@ -302,6 +302,13 @@ test.describe('render', () => {
       const result = page.locator('#issue-3542-result');
       await expect(result).toHaveText('CODE IS 1');
     });
+
+    test('issue3622', async ({ page }) => {
+      const checkbox = page.locator('#issue-3622-checkbox');
+      await checkbox.click();
+      const select = page.locator('#issue-3622-select');
+      await expect(select).toHaveAttribute('value', 'option2');
+    });
   }
 
   tests();
