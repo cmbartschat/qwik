@@ -573,4 +573,105 @@ export default component$(() => {
   });
 });
 
+test('custom-hook-return', () => {
+  ruleTester.run('my-rule', rules['custom-hook-return'] as any, {
+    valid: [
+      `
+export function useSession1() {
+  useContext();
+}
+
+export function useSession2() {
+  return useContext();
+}
+
+export function useSession3() {
+  return useSignal();
+}
+
+export function useSession4() {
+  return {
+    signal1: useSignal(),
+    signal2: useSignal(),
+  }
+}
+
+export function useSession4() {
+  return {
+    signal1: useCustomSignal(),
+    signal2: useCustomSignal2(),
+  }
+}
+`],
+    invalid: [
+      {
+        code: `
+export function useSession4() {
+  return useContext().value;
+}
+
+export function useSession4() {
+  return [
+    useCustomSignal(),
+    useCustomSignal2(),
+  ]
+}
+
+
+`,
+        errors: [{ messageId: 'non-stable-return' }],
+      },
+      {
+        code: `export const HelloWorld = component$(async () => {
+            if (stuff) {
+              await something();
+            }
+            useMethod();
+            return $(() => {
+              return (
+                <div>
+                  {prop}
+                </div>
+              );
+            });
+          });`,
+        errors: [{ messageId: 'use-after-await' }],
+      },
+
+      {
+        code: `export function noUseSession() {
+          useContext();
+        }`,
+        errors: [{ messageId: 'use-wrong-function' }],
+      },
+      {
+        code: `export const noUseSession = () => {
+          useContext();
+        }`,
+        errors: [{ messageId: 'use-wrong-function' }],
+      },
+      {
+        code: `export const noUseSession = () => {
+         return useContext();
+        }`,
+        errors: [{ messageId: 'use-wrong-function' }],
+      },
+      {
+        code: `export const noUseSession = () => useContext();`,
+        errors: [{ messageId: 'use-wrong-function' }],
+      },
+      {
+        code: `export const noUseSession = () => useContext().value;`,
+        errors: [{ messageId: 'use-wrong-function' }],
+      },
+      {
+        code: `export const noUseSession = () => {
+         return useContext();
+        }`,
+        errors: [{ messageId: 'use-wrong-function' }],
+      },
+    ],
+  });
+});
+
 export {};
