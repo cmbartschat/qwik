@@ -1,20 +1,18 @@
 /* eslint-disable no-console */
 import type { Rule } from 'eslint';
-import type { CallExpression } from 'estree';
+import type { ArrowFunctionExpression } from 'estree';
 
 export const customHookReturn: Rule.RuleModule = {
   meta: {
     type: 'problem',
     docs: {
-      description: 'Object destructuring is not recommended for component$',
+      description: 'Custom hooks must return only stable references',
       category: 'Variables',
       recommended: true,
       url: 'https://github.com/BuilderIO/qwik',
     },
     messages: {
-      'use-after-await': 'Calling use* methods after await is not safe.',
-      'use-wrong-function': 'Calling use* methods in wrong function.',
-      'use-not-root': 'Calling use* methods in non-root component.',
+      'non-stable-return': 'Return values of a hook should only contain stable references.',
     },
   },
   create(context) {
@@ -25,11 +23,16 @@ export const customHookReturn: Rule.RuleModule = {
     if (modifyJsxSource) {
       return {};
     }
-    const stack: { await: boolean }[] = [];
+
+
+    const stack: { hook: boolean }[] = [];
     return {
-      ArrowFunctionExpression() {
-        stack.push({ await: false });
+      ArrowFunctionExpression(node: ArrowFunctionExpression & Rule.NodeParentExtension) {
+        stack.push({ hook: node });
       },
+      ReturnStatement: (node) {
+
+      }
       'ArrowFunctionExpression:exit'(d) {
         stack.pop();
       },

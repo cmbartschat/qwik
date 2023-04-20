@@ -144,7 +144,7 @@ export const useSession5 = () => useContext()?.value; + 10;
         code: `export const noUseSession = () => {
          return useContext();
         }`,
-        errors: [{ messageId: 'use-wrong-function' }],
+        errors: [{ messageId: '2use-wrong-function' }],
       },
       {
         code: `export const noUseSession = () => useContext();`,
